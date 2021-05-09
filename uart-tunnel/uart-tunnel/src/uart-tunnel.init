@@ -1,0 +1,30 @@
+#!/bin/sh /etc/rc.common
+
+START=90
+STOP=99
+
+APP=uart-tunnel
+KILL=uart-tunnel
+CONF=/etc/config/$APP.conf
+CMD=/usr/sbin/$APP
+
+SYSCONF=/etc/config/gwsconfig.configure
+
+uci_conf() {
+	local conf="$1"
+
+	$KILL -down >/dev/null 2>&1
+	$CMD >/dev/null 2>&1 &
+}
+
+start() {
+	$CMD -stop
+        $CMD -start >/dev/null 2>&1 &
+}
+
+stop() {
+	$CMD -stop
+	sleep 1
+	killall $APP
+}
+
